@@ -7,7 +7,7 @@ const esHelpers = require('./esHelpers');
 const req = {
   body: [{
     uuid: 1,
-    address: '38 TestHelper3 St.',
+    address: '38 WUSGOOD St.',
     city: 'San Francisco',
     country: 'USA',
     daysAvailable: ['JAN012018', 'JAN022018', 'JAN032018'],
