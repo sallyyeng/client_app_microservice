@@ -45,9 +45,9 @@ app.get('/', function (req, res) {
         match_all: {}
       }
     }
-  }).then(function(response) {
+  }).then(err => {
     res.send(response.hits.hits);
-  }, function(error) {
+  }, error => {
     res.status(error.statusCode).send(error.message);
   });
 });
