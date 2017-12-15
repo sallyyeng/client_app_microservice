@@ -9,7 +9,6 @@ const es_type = 'listings';
 
 // Verify connection with elasticsearch db //
 es_client.ping({
-  // ping usually has a 3000ms timeout
   requestTimeout: 1000
 }, (error => {
     if (error) {
@@ -19,42 +18,60 @@ es_client.ping({
     }
   }));
 
-// Create initial search database //
-es_client.indices.create({
-  index: es_index
-}).then((response, err) => {
-  if (err) {
-    throw err;
-    console.log(`${es_index} index created!`);
-  }
-}).catch(err => {
-  console.log(`${es_index} index already exists, but that's OKAY!`);
-});
+// If index doesn't already exist, create one //
+es_client.indices.exists({index: `${es_index}`})
+  .then(exists => {
+    if (!exists) {
+      es_client.indices.create({
+        index: es_index
+      })
+        .then((response, err) => {
+          if (err) { throw err; }
+          console.log('es_index created!');
+        })
+        .catch(err => {
+          console.log(`CANNOT CREATE INDEX > INVESTIGATE THIS ERROR: ${err}`);
+        });
+    }
+  });
 
-// ElasticSearch helper functions //
+//****************** ElasticSearch helper functions ******************//
 
-module.exports.createListing = (req, res) => {
-  // placeholder for Inventory's request body //
-  const listings = [{
-    uuid: 1,
-    address: '38 INDEXEXISTSTILLWORKS St.',
-    city: 'San Francisco',
-    country: 'USA',
-    daysAvailable: ['JAN012018', 'JAN022018', 'JAN032018'],
-    price: 540,
-    rooms: 3,
-    photos: ['www.image1.com', 'www.image2.com'],
-    photoAccuracy: 3
-  }];
+// Placeholder for incoming request bodies //
 
-  // const listings = req.body;
+// From Inventory
+const listings = [{
+  uuid: 1,
+  address: '38 WUSGOOD St.',
+  city: 'Las Vegas',
+  country: 'Nevada',
+  daysAvailable: ['JAN012018', 'JAN022018', 'JAN032018'],
+  price: 540,
+  rooms: 3,
+  photos: ['www.image1.com', 'www.image2.com'],
+  photoAccuracy: 3
+}];
+
+// From User
+const query = {
+  uuid: 58,
+  city: 'Las Vegas',
+  country: 'USA',
+  daysAvailable: [],
+  price: 500,
+  rooms: 3,
+};
+
+module.exports.createListing = (listing, res) => {
+  // const listings = req.body; // Code for when Inventory microserv is connected
+
   return es_client.index({
     index: es_index,
     type: es_type,
-    body: listings[0]
+    body: listing
   }).then((response, err) => {
     if (err) { throw err; }
-    res.sendStatus(200);
+    console.log('created listing in db');
   }).catch(err => {
     console.log(`esHelpers CREATE LISTING ERROR where err is ${err}`);
     res.status(err.statusCode).send(err.message);
@@ -63,12 +80,16 @@ module.exports.createListing = (req, res) => {
 };
 
 module.exports.searchListing = (listing, res) => {
+  // const query = req.params; // Code for when Users data is generated
+
   return es_client.search({
     index: es_index,
     type: es_type,
     body: {
       query: {
-        match_all: {}
+        match: {
+          city: query.city
+        }
       }
     }
   }).then((response, err) => {
