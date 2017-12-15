@@ -6,10 +6,10 @@ const esHelpers = require('./esHelpers');
 
 const sampleReq = {
   body: [{
-    uuid: 1,
-    address: '38 Hello St.',
-    city: 'Chicago',
-    country: 'USA',
+    user_uuid: 84,
+    address: '38 Leo St.',
+    city: 'Taipei',
+    country: 'Taisan',
     daysAvailable: ['JAN012018', 'JAN022018', 'JAN032018'],
     price: 540,
     rooms: 3,
@@ -17,10 +17,10 @@ const sampleReq = {
     photoAccuracy: 3
   },
   {
-    uuid: 1,
-    address: '38 Another St.',
-    city: 'Houston',
-    country: 'USA',
+    user_uuid: 93,
+    address: '38 Leo2 St.',
+    city: 'Shanghai',
+    country: 'China',
     daysAvailable: ['JAN012018', 'JAN022018', 'JAN032018'],
     price: 540,
     rooms: 3,
@@ -28,8 +28,8 @@ const sampleReq = {
     photoAccuracy: 3
   },
   {
-    uuid: 1,
-    address: '38 Nomo St.',
+    user_uuid: 44,
+    address: '38 Leo3 St.',
     city: 'Miami',
     country: 'USA',
     daysAvailable: ['JAN012018', 'JAN022018', 'JAN032018'],
@@ -57,7 +57,17 @@ app.post('/client/update', (req, res) => {
 });
 
 app.get('/client/listings', (req, res) => {
-  esHelpers.searchListing(req, res);
+  esHelpers.searchListings(req, res);
+});
+
+app.get('/client/listing', (req, res) => {
+  esHelpers.selectListing(req, res);
+});
+
+app.post('/client/booking', (req, res) => {
+  // post to bookings with req.body (bookings data)
+  // when it comes back, check out response > call esHelpers.isBooked
+  // it will handle from there
 });
 
 const express_port = 3000;
@@ -65,3 +75,8 @@ const express_port = 3000;
 app.listen(express_port, function () {
   console.log('App starting on port: ', express_port);
 });
+
+// To-Do:
+// Figure out how to prioritize search fields
+// Look into SQS
+// Implement all output requirements

@@ -4,7 +4,7 @@ const elasticsearch = require('elasticsearch');
 const es_client = elasticsearch.Client({
   host: process.env.ELASTICSEARCH_HOST + ':9200'
 });
-const es_index = 'search';
+const es_index = 'user_events';
 const es_type = 'listings';
 
 // Verify connection with elasticsearch db //
@@ -39,39 +39,35 @@ es_client.indices.exists({index: `${es_index}`})
 
 // Placeholder for incoming request bodies //
 
-// From Inventory
-const listings = [{
-  uuid: 1,
-  address: '38 WUSGOOD St.',
-  city: 'Las Vegas',
-  country: 'Nevada',
-  daysAvailable: ['JAN012018', 'JAN022018', 'JAN032018'],
-  price: 540,
-  rooms: 3,
-  photos: ['www.image1.com', 'www.image2.com'],
-  photoAccuracy: 3
-}];
-
 // From User
 const query = {
-  uuid: 58,
-  city: 'Las Vegas',
+  user_uuid: 58,
+  city: 'San Francisco',
   country: 'USA',
   daysAvailable: [],
   price: 500,
   rooms: 3,
 };
 
+const selectedListing = {
+  user_uuid: '',
+  listing_uuid: 've0KWWABidUrXXgVbtYb'
+};
+
+const confirmation = {
+  booking_id: 1234556,
+  is_booked: true,
+};
+
+
 module.exports.createListing = (listing, res) => {
   // const listings = req.body; // Code for when Inventory microserv is connected
-
   return es_client.index({
     index: es_index,
     type: es_type,
     body: listing
   }).then((response, err) => {
     if (err) { throw err; }
-    console.log('created listing in db');
   }).catch(err => {
     console.log(`esHelpers CREATE LISTING ERROR where err is ${err}`);
     res.status(err.statusCode).send(err.message);
@@ -79,9 +75,8 @@ module.exports.createListing = (listing, res) => {
 
 };
 
-module.exports.searchListing = (listing, res) => {
+module.exports.searchListings = (req, res) => {
   // const query = req.params; // Code for when Users data is generated
-
   return es_client.search({
     index: es_index,
     type: es_type,
@@ -99,4 +94,33 @@ module.exports.searchListing = (listing, res) => {
     console.log(`esHelpers SEARCH LISTING ERROR where err is ${err}`);
     res.status(err.statusCode).send(err.message);
   });
+};
+
+module.exports.selectListing = (req, res) => {
+  // const query = req.params; // Code for when Users data is generated
+  return es_client.search({
+    index: es_index,
+    type: es_type,
+    body: {
+      query: {
+        match: {
+          _id: selectedListing.listing_uuid
+        }
+      }
+    }
+  }).then((response, err) => {
+    if (err) { throw err; }
+    res.send(response);
+  }).catch(err => {
+    console.log(`esHelpers SEARCH LISTING ERROR where err is ${err}`);
+    res.status(err.statusCode).send(err.message);
+  });
+};
+
+module.exports.isBooked = (req, res) => {
+  if (confirmation.is_booked) {
+    res.sendStatus(201);
+  } else {
+    res.status(400).send('Our apologies, the listing is no longer available');
+  }
 };
