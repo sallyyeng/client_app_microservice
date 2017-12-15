@@ -2,41 +2,27 @@ const express = require('express');
 const app = express();
 const elasticsearch = require('elasticsearch');
 const env = require('dotenv').load(); // try to incorporate config.json file;
+const esHelpers = require('./esHelpers');
 
-// initialize elasticsearch server connection //
-console.log('this is the host for elasticsearch: ', process.env.ELASTICSEARCH_HOST);
-const es_client = elasticsearch.Client({
-  host: process.env.ELASTICSEARCH_HOST + ':9200'
-});
-const es_index = 'search';
-const es_type = 'listings';
+const sampleReqBody = [{
+  uuid: 1,
+  address: '38 TestHelper1 St.',
+  city: 'San Francisco',
+  country: 'USA',
+  daysAvailable: ['JAN012018', 'JAN022018', 'JAN032018'],
+  price: 540,
+  rooms: 3,
+  photos: ['www.image1.com', 'www.image2.com'],
+  photoAccuracy: 3
+}];
 
-// ensure es index exists
-es_client.indices.create({
-  index: es_index
-}, function(err, resp, status) {
-  // ensure es document exists
-  es_client.index({
-    index: es_index,
-    type: es_type,
-    id: 1,
-    body: {
-      uuid: 1,
-      address: '38 Palm St.',
-      city: 'San Francisco',
-      country: 'USA',
-      daysAvailable: ['JAN012018', 'JAN022018', 'JAN032018'],
-      price: 540,
-      rooms: 3,
-      photos: ['www.image1.com', 'www.image2.com'],
-      photoAccuracy: 3
-    }
-  }, function(err, resp, status) {
-    if (err) { console.log('ERROR:', err); }
-  });
+app.post('/', (req, res) => {
+  console.log('inside post handler');
+  esHelpers.createListing(sampleReqBody);
+  res.sendStatus(200);
 });
 
-app.get('/', function (req, res) {
+app.get('/', (req, res) => {
   es_client.search({
     index: es_index,
     type: es_type,
