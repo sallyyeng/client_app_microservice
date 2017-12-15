@@ -9,18 +9,60 @@ const es_client = elasticsearch.Client({
 const es_index = 'search';
 const es_type = 'listings';
 
-module.exports.createListing = (sampleReqBody) => {
-  es_client.indices.create({
-    index: es_index
-  }, (err, resp, status) => {
-    // ensure es document exists
-    return es_client.index({
-      index: es_index,
-      type: es_type,
-      body: sampleReqBody[0]
-    }, (err, resp, status) => {
-      if (err) { console.log(`esHelpers CREATE LISTING ERROR where err is ${err}, response is ${resp} and status is ${status}`); }
-    });
+// // create initial search database //
+// es_client.indices.create({
+//   index: es_index
+// }).then((response, err) => {
+//   if (err) {
+//     throw err;
+//   }
+// }).catch(err => {
+//   console.log(`esHelpers CREATE LISTING ERROR where err is ${err}`);
+// });
+
+// ElasticSearch helper functions //
+module.exports.createListing = (req, res) => {
+  const listing = [{
+    uuid: 1,
+    address: '38 DOESTHISWORK St.',
+    city: 'San Francisco',
+    country: 'USA',
+    daysAvailable: ['JAN012018', 'JAN022018', 'JAN032018'],
+    price: 540,
+    rooms: 3,
+    photos: ['www.image1.com', 'www.image2.com'],
+    photoAccuracy: 3
+  }];
+
+  return es_client.index({
+    index: es_index,
+    type: es_type,
+    body: listing[0]
+  }).then((response, err) => {
+    if (err) { throw err; }
+    res.sendStatus(200);
+  }).catch(err => {
+    console.log(`esHelpers CREATE LISTING ERROR where err is ${err}`);
+    res.status(err.statusCode).send(err.message);
   });
+
 };
 
+module.exports.searchListing = (listing, res) => {
+  console.log('inside searchListing handler');
+  return es_client.search({
+    index: es_index,
+    type: es_type,
+    body: {
+      query: {
+        match_all: {}
+      }
+    }
+  }).then((response, err) => {
+    if (err) { throw err; }
+    res.send(response.hits.hits);
+  }).catch(err => {
+    console.log(`esHelpers SEARCH LISTING ERROR where err is ${err}`);
+    res.status(err.statusCode).send(err.message);
+  });
+};

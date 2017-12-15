@@ -4,38 +4,27 @@ const elasticsearch = require('elasticsearch');
 const env = require('dotenv').load(); // try to incorporate config.json file;
 const esHelpers = require('./esHelpers');
 
-const sampleReqBody = [{
-  uuid: 1,
-  address: '38 TestHelper1 St.',
-  city: 'San Francisco',
-  country: 'USA',
-  daysAvailable: ['JAN012018', 'JAN022018', 'JAN032018'],
-  price: 540,
-  rooms: 3,
-  photos: ['www.image1.com', 'www.image2.com'],
-  photoAccuracy: 3
-}];
+const req = {
+  body: [{
+    uuid: 1,
+    address: '38 TestHelper3 St.',
+    city: 'San Francisco',
+    country: 'USA',
+    daysAvailable: ['JAN012018', 'JAN022018', 'JAN032018'],
+    price: 540,
+    rooms: 3,
+    photos: ['www.image1.com', 'www.image2.com'],
+    photoAccuracy: 3
+  }]
+};
 
 app.post('/', (req, res) => {
-  console.log('inside post handler');
-  esHelpers.createListing(sampleReqBody);
-  res.sendStatus(200);
+  esHelpers.createListing(req, res);
+
 });
 
 app.get('/', (req, res) => {
-  es_client.search({
-    index: es_index,
-    type: es_type,
-    body: {
-      query: {
-        match_all: {}
-      }
-    }
-  }).then(err => {
-    res.send(response.hits.hits);
-  }, error => {
-    res.status(error.statusCode).send(error.message);
-  });
+  esHelpers.searchListing(req, res);
 });
 
 const express_port = 3000;
