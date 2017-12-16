@@ -1,47 +1,14 @@
-const elasticsearch = require('elasticsearch');
-
-// Initialize elasticsearch server connection //
-const es_client = elasticsearch.Client({
-  host: process.env.ELASTICSEARCH_HOST + ':9200'
-});
+const es_client = require('./index.js');
 const es_index = 'client_events';
 const es_type = 'listings';
-
-// Verify connection with elasticsearch db //
-es_client.ping({
-  requestTimeout: 1000
-}, (error => {
-    if (error) {
-      console.trace('elasticsearch cluster is down!: ', error);
-    } else {
-      console.log('ElasticSearch DB Connected');
-    }
-  }));
-
-module.exports = es_client;
-
-// If index doesn't already exist, create one //
-es_client.indices.exists({index: `${es_index}`})
-  .then(exists => {
-    if (!exists) {
-      es_client.indices.create({
-        index: es_index
-      })
-        .then((response, err) => {
-          if (err) { throw err; }
-          console.log('es_index created!');
-        })
-        .catch(err => {
-          console.log(`CANNOT CREATE INDEX > INVESTIGATE THIS ERROR: ${err}`);
-        });
-    }
-  });
+// const es_index = require('./index.js');
+// const es_type = require('./index.js');
 
 //*************** STUBBED REQUEST BODIES TO TEST HANDLERS *************//
 
 const selectedListing = { // When user selects a listing
   params: {
-    id: 'wu0MWWABidUrXXgV8Nan'
+    id: 'ilJlXWABnGPG6BpeYTid'
   }
 };
 
@@ -94,6 +61,7 @@ module.exports.searchListings = (req, res) => {
 
 module.exports.selectListing = (req, res) => {
   // const query = req.params.id; // Code for when Users data is generated
+  console.log('inside select listing');
   return es_client.search({
     index: es_index,
     type: es_type,
@@ -106,9 +74,13 @@ module.exports.selectListing = (req, res) => {
     }
   }).then((response, err) => {
     if (err) { throw err; }
-    res.send(response);
+    if (response.hits.hits.length === 0) {
+      console.log('NO MATCHING LISTINGS');
+      res.status(404).send('No Matching Listings');
+    }
+    res.send(response.hits.hits);
   }).catch(err => {
-    console.log(`esHelpers SEARCH LISTING ERROR where err is ${err}`);
+    console.log(`esHelpers SEARCH LISTING QUERY FAILED with error: ${err}`);
     res.status(err.statusCode).send(err.message);
   });
 };
