@@ -6,42 +6,42 @@ const esHelpers = require('./esHelpers');
 
 const sampleReq = {
   body: [{
-    user_uuid: 84,
-    address: '38 Leo St.',
-    city: 'Taipei',
-    country: 'Taisan',
-    daysAvailable: ['JAN012018', 'JAN022018', 'JAN032018'],
-    price: 540,
-    rooms: 3,
-    photos: ['www.image1.com', 'www.image2.com'],
-    photoAccuracy: 3
-  },
-  {
-    user_uuid: 93,
-    address: '38 Leo2 St.',
-    city: 'Shanghai',
-    country: 'China',
-    daysAvailable: ['JAN012018', 'JAN022018', 'JAN032018'],
-    price: 540,
-    rooms: 3,
-    photos: ['www.image1.com', 'www.image2.com'],
-    photoAccuracy: 3
-  },
-  {
-    user_uuid: 44,
-    address: '38 Leo3 St.',
-    city: 'Miami',
+    listing_uuid: 5674,
+    address: '38 Molly St.',
+    city: 'Houston',
     country: 'USA',
-    daysAvailable: ['JAN012018', 'JAN022018', 'JAN032018'],
-    price: 540,
-    rooms: 3,
-    photos: ['www.image1.com', 'www.image2.com'],
+    daysAvailable: [01012017, 01022017, 01032017, 01042017],
+    price: 300,
+    rooms: 2,
+    photos: ['www.imgur2.com', 'www.imgur3.com', 'www.imgur4.com'],
     photoAccuracy: 3
+  },
+  {
+    listing_uuid: 3512,
+    address: '38 Candy Ave.',
+    city: 'Bangkok',
+    country: 'Thailand',
+    daysAvailable: [02012017, 02022017, 03032017, 04042017],
+    price: 321,
+    rooms: 3,
+    photos: ['www.imgur2.com', 'www.imgur3.com', 'www.imgur4.com'],
+    photoAccuracy: 4
+  },
+  {
+    listing_uuid: 5635574,
+    address: '38 Monner Ave.',
+    city: 'Taipei',
+    country: 'Taiwan',
+    daysAvailable: [02012017, 02022017, 03032017, 04042017],
+    price: 500,
+    rooms: 1,
+    photos: ['www.imgur2.com', 'www.imgur3.com', 'www.imgur4.com'],
+    photoAccuracy: 4
   }]
 };
 
-// send a get request to Mike for listings //
-app.post('/client/update', (req, res) => {
+// initial load of database listings //
+app.post('/client/create_database', (req, res) => {
   const listings = sampleReq.body;
   Promise.all(listings.map(listing => {
     return esHelpers.createListing(listing, res);
@@ -68,11 +68,13 @@ app.get('/client/listings/:id', (req, res) => {
   esHelpers.selectListing(req, res);
 });
 
-app.post('/client/booking', (req, res) => {
-  // post to bookings with req.body (bookings data)
-  // when it comes back, check out response > call esHelpers.isBooked
-  // it will handle from there
-});
+// SQS: Output bookings request to Bookings
+// post to bookings with req.body (bookings data)
+// when it comes back, check out response > call esHelpers.isBooked
+// it will handle from there
+
+// SQS: Output new listings request to Inventory
+// use the /createdatabase endpoint handler above to handle those incoming new listings
 
 const express_port = 3000;
 
@@ -81,6 +83,6 @@ app.listen(express_port, function () {
 });
 
 // To-Do:
-// Figure out how to prioritize search fields
 // Look into SQS
 // Implement all output requirements
+// include body parser

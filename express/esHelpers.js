@@ -4,7 +4,7 @@ const elasticsearch = require('elasticsearch');
 const es_client = elasticsearch.Client({
   host: process.env.ELASTICSEARCH_HOST + ':9200'
 });
-const es_index = 'user_events';
+const es_index = 'client_events';
 const es_type = 'listings';
 
 // Verify connection with elasticsearch db //
@@ -76,7 +76,6 @@ module.exports.createListing = (listing, res) => {
 };
 
 module.exports.searchListings = (req, res) => {
-  console.log('query is: ', searchReq.query)
   // const query = req.params; // Code for when Users data is generated
   return es_client.search({
     index: es_index,
