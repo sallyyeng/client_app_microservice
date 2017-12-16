@@ -37,10 +37,9 @@ es_client.indices.exists({index: `${es_index}`})
 
 //****************** ElasticSearch helper functions ******************//
 
-// Placeholder for incoming request bodies //
+// STUBBED REQUEST BODIES TO TEST HANDLERS //
 
-// From User
-const query = {
+const query = { // When user searches for listings
   user_uuid: 58,
   city: 'San Francisco',
   country: 'USA',
@@ -49,16 +48,18 @@ const query = {
   rooms: 3,
 };
 
-const selectedListing = {
-  user_uuid: '',
-  listing_uuid: 've0KWWABidUrXXgVbtYb'
+const selectedListing = { // When user selects a listing
+  params: {
+    id: 'wu0MWWABidUrXXgV8Nan'
+  }
 };
 
-const confirmation = {
+const confirmation = { // When you hear back from bookings about bookings req
   booking_id: 1234556,
   is_booked: true,
 };
 
+// STUBBED REQUEST BODIES TO TEST HANDLERS //
 
 module.exports.createListing = (listing, res) => {
   // const listings = req.body; // Code for when Inventory microserv is connected
@@ -97,14 +98,14 @@ module.exports.searchListings = (req, res) => {
 };
 
 module.exports.selectListing = (req, res) => {
-  // const query = req.params; // Code for when Users data is generated
+  // const query = req.params.id; // Code for when Users data is generated
   return es_client.search({
     index: es_index,
     type: es_type,
     body: {
       query: {
         match: {
-          _id: selectedListing.listing_uuid
+          _id: selectedListing.params.id
         }
       }
     }
@@ -121,6 +122,6 @@ module.exports.isBooked = (req, res) => {
   if (confirmation.is_booked) {
     res.sendStatus(201);
   } else {
-    res.status(400).send('Our apologies, the listing is no longer available');
+    res.status(400).send('Booking no longer available');
   }
 };

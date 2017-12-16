@@ -40,6 +40,7 @@ const sampleReq = {
   }]
 };
 
+// send a get request to Mike for listings //
 app.post('/client/update', (req, res) => {
   const listings = sampleReq.body;
   Promise.all(listings.map(listing => {
@@ -56,11 +57,13 @@ app.post('/client/update', (req, res) => {
 
 });
 
+// Endpoints //
+
 app.get('/client/listings', (req, res) => {
   esHelpers.searchListings(req, res);
 });
 
-app.get('/client/listing', (req, res) => {
+app.get('/client/listings/:id', (req, res) => {
   esHelpers.selectListing(req, res);
 });
 
