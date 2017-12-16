@@ -60,6 +60,7 @@ app.post('/client/update', (req, res) => {
 // Endpoints //
 
 app.get('/client/listings', (req, res) => {
+  console.log('inside handler');
   esHelpers.searchListings(req, res);
 });
 

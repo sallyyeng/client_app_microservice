@@ -39,10 +39,9 @@ es_client.indices.exists({index: `${es_index}`})
 
 // STUBBED REQUEST BODIES TO TEST HANDLERS //
 
-const query = { // When user searches for listings
+const searchReq = { // When user searches for listings
   user_uuid: 58,
-  city: 'San Francisco',
-  country: 'USA',
+  query: 'USA',
   daysAvailable: [],
   price: 500,
   rooms: 3,
@@ -77,14 +76,19 @@ module.exports.createListing = (listing, res) => {
 };
 
 module.exports.searchListings = (req, res) => {
+  console.log('query is: ', searchReq.query)
   // const query = req.params; // Code for when Users data is generated
   return es_client.search({
     index: es_index,
     type: es_type,
     body: {
       query: {
-        match: {
-          city: query.city
+        multi_match: {
+          query: searchReq.query,
+          fields: [
+            'city',
+            'country'
+          ]
         }
       }
     }
