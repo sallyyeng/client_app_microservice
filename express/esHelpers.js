@@ -12,11 +12,13 @@ es_client.ping({
   requestTimeout: 1000
 }, (error => {
     if (error) {
-      console.trace('elasticsearch cluster is down!');
+      console.trace('elasticsearch cluster is down!: ', error);
     } else {
       console.log('ElasticSearch DB Connected');
     }
   }));
+
+module.exports = es_client;
 
 // If index doesn't already exist, create one //
 es_client.indices.exists({index: `${es_index}`})
@@ -35,17 +37,7 @@ es_client.indices.exists({index: `${es_index}`})
     }
   });
 
-//****************** ElasticSearch helper functions ******************//
-
-// STUBBED REQUEST BODIES TO TEST HANDLERS //
-
-const searchReq = { // When user searches for listings
-  user_uuid: 58,
-  query: 'USA',
-  daysAvailable: [],
-  price: 500,
-  rooms: 3,
-};
+//*************** STUBBED REQUEST BODIES TO TEST HANDLERS *************//
 
 const selectedListing = { // When user selects a listing
   params: {
@@ -58,7 +50,7 @@ const confirmation = { // When you hear back from bookings about bookings req
   is_booked: true,
 };
 
-// STUBBED REQUEST BODIES TO TEST HANDLERS //
+//****************** ElasticSearch helper functions ******************//
 
 module.exports.createListing = (listing, res) => {
   // const listings = req.body; // Code for when Inventory microserv is connected
@@ -83,7 +75,7 @@ module.exports.searchListings = (req, res) => {
     body: {
       query: {
         multi_match: {
-          query: searchReq.query,
+          query: req.params.query, // change this for query
           fields: [
             'city',
             'country'
@@ -93,7 +85,7 @@ module.exports.searchListings = (req, res) => {
     }
   }).then((response, err) => {
     if (err) { throw err; }
-    res.send(response.hits.hits);
+    return response.hits.hits;
   }).catch(err => {
     console.log(`esHelpers SEARCH LISTING ERROR where err is ${err}`);
     res.status(err.statusCode).send(err.message);

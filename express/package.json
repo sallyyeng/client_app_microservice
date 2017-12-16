@@ -5,7 +5,6 @@
   "main": "index.js",
   "scripts": {
     "server": "nodemon ./index.js",
-    "sqs": "nodemon ./sqs_server.js",
     "test": ""
   },
   "repository": {

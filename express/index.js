@@ -3,6 +3,14 @@ const app = express();
 const elasticsearch = require('elasticsearch');
 const env = require('dotenv').load(); // try to incorporate config.json file;
 const esHelpers = require('./esHelpers');
+const sqsHelpers = require('./sqs/sqsHelpers.js');
+const axios = require('axios');
+const bodyParser = require('body-parser')
+
+// Initialize queues //
+// sqsHelpers.sendUserSearchEvent('SearchEventsQueue');
+
+app.use(bodyParser.urlencoded({ extended: false }));
 
 const sampleReq = {
   body: [{
@@ -40,7 +48,17 @@ const sampleReq = {
   }]
 };
 
-// initial load of database listings //
+const searchReq = { // When user searches for listings
+  params: {
+    user_uuid: 58,
+    search_date: 03022017,
+    query: 'Taipei',
+    daysAvailable: [],
+    room_count: 3,
+  }
+};
+
+// Initialize database with listings //
 app.post('/client/create_database', (req, res) => {
   const listings = sampleReq.body;
   Promise.all(listings.map(listing => {
@@ -60,8 +78,14 @@ app.post('/client/create_database', (req, res) => {
 // Endpoints //
 
 app.get('/client/listings', (req, res) => {
-  console.log('inside handler');
-  esHelpers.searchListings(req, res);
+  // let { user_uuid, search_date, query } = req.params; // comment in when real requests happen
+
+  // query listings matching user's serach
+  esHelpers.searchListings(searchReq, res)
+    .then(listings => {
+      sqsHelpers.sendUserSearchEvent(req)
+      res.status(200).send(listings);
+    })
 });
 
 app.get('/client/listings/:id', (req, res) => {
@@ -81,8 +105,3 @@ const express_port = 3000;
 app.listen(express_port, function () {
   console.log('App starting on port: ', express_port);
 });
-
-// To-Do:
-// Look into SQS
-// Implement all output requirements
-// include body parser
