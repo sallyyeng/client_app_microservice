@@ -21,7 +21,7 @@ const confirmation = { // When you hear back from bookings about bookings req
 
 module.exports.createListing = (listing, res) => {
   // const listings = req.body; // Code for when Inventory microserv is connected
-  return es_client.index({
+  return es_client.create({
     index: es_index,
     type: es_type,
     body: listing

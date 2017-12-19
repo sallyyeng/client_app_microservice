@@ -58,23 +58,6 @@ const searchReq = { // When user searches for listings
   }
 };
 
-// Initialize database with listings //
-app.post('/client/create_database', (req, res) => {
-  const listings = sampleReq.body;
-  Promise.all(listings.map(listing => {
-    return esHelpers.createListing(listing, res);
-  }))
-    .then((response, err) => {
-      if (err) { throw err; }
-      res.sendStatus(201);
-    })
-    .catch(err => {
-      console.log(`post handler: CREATE LISTING ERROR where err is ${err}`);
-      res.sendStatus(400);
-    });
-
-});
-
 // Endpoints //
 
 app.get('/client/listings', (req, res) => {
@@ -105,3 +88,20 @@ const express_port = 3000;
 app.listen(express_port, function () {
   console.log('App starting on port: ', express_port);
 });
+
+// // Initialize database with listings //
+// app.post('/client/create_database', (req, res) => {
+//   const listings = sampleReq.body;
+//   Promise.all(listings.map(listing => {
+//     return esHelpers.createListing(listing, res);
+//   }))
+//     .then((response, err) => {
+//       if (err) { throw err; }
+//       res.sendStatus(201);
+//     })
+//     .catch(err => {
+//       console.log(`post handler: CREATE LISTING ERROR where err is ${err}`);
+//       res.sendStatus(400);
+//     });
+
+// });

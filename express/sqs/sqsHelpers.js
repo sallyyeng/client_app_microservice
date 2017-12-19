@@ -1,6 +1,7 @@
 const sqs = require('./index.js');
 const queueURL = 'https://sqs.us-west-1.amazonaws.com/748430602903/SearchEventsQueue';
 
+// refactor later for sending batched messages //
 module.exports.sendUserSearchEvent = (req) => {
   let { user_uuid, search_date, query } = req.params;
   let userSearch = {

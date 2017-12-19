@@ -9,8 +9,6 @@ aws.config.loadFromPath('./config/config.json');
 // Instantiate SQS.
 const sqs = new aws.SQS();
 
-module.exports = sqs;
-
 // Start server.
 const sqs_port = 5000;
 
@@ -18,5 +16,6 @@ app.listen(sqs_port, function () {
   console.log(`AWS SQS example app listening on port ${sqs_port}`);
 });
 
-// How can I create queue just once? //
+module.exports = sqs;
 
+// How can I create queue just once? //

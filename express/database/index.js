@@ -4,9 +4,8 @@ const elasticsearch = require('elasticsearch');
 const es_client = elasticsearch.Client({
   host: process.env.ELASTICSEARCH_HOST + ':9200'
 });
-const es_index = 'client_events';
-const es_type = 'listings';
-
+const es_index = 'last_test';
+const es_type = 'test';
 
 // Verify connection with elasticsearch db //
 es_client.ping({
@@ -39,4 +38,3 @@ es_client.indices.exists({index: `${es_index}`})
 module.exports = es_client;
 // module.exports = es_index;
 // module.exports = es_type;
-
