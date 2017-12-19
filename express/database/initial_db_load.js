@@ -1,7 +1,3 @@
-// // const es_client = require('./index.js');
-// // const es_index = 'test2';
-// // const es_type = 'test';
-
 // const elasticsearch = require('elasticsearch');
 
 // // Initialize elasticsearch server connection //

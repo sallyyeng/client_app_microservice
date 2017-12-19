@@ -4,8 +4,8 @@ const elasticsearch = require('elasticsearch');
 const es_client = elasticsearch.Client({
   host: process.env.ELASTICSEARCH_HOST + ':9200'
 });
-const es_index = 'last_test';
-const es_type = 'test';
+const es_index = 'client_micro_service';
+const es_type = 'listings';
 
 // Verify connection with elasticsearch db //
 es_client.ping({
