@@ -1,5 +1,5 @@
 const es_client = require('./index.js');
-const es_index = 'client_events';
+const es_index = 'client_micro_service';
 const es_type = 'listings';
 // const es_index = require('./index.js');
 // const es_type = require('./index.js');
@@ -18,21 +18,6 @@ const confirmation = { // When you hear back from bookings about bookings req
 };
 
 //****************** ElasticSearch helper functions ******************//
-
-module.exports.createListing = (listing, res) => {
-  // const listings = req.body; // Code for when Inventory microserv is connected
-  return es_client.create({
-    index: es_index,
-    type: es_type,
-    body: listing
-  }).then((response, err) => {
-    if (err) { throw err; }
-  }).catch(err => {
-    console.log(`esHelpers CREATE LISTING ERROR where err is ${err}`);
-    res.status(err.statusCode).send(err.message);
-  });
-
-};
 
 module.exports.searchListings = (req, res) => {
   // const query = req.params; // Code for when Users data is generated
@@ -74,21 +59,31 @@ module.exports.selectListing = (req, res) => {
     }
   }).then((response, err) => {
     if (err) { throw err; }
-    if (response.hits.hits.length === 0) {
-      console.log('NO MATCHING LISTINGS');
-      res.status(404).send('No Matching Listings');
-    }
-    res.send(response.hits.hits);
+    return response.hits.hits;
   }).catch(err => {
     console.log(`esHelpers SEARCH LISTING QUERY FAILED with error: ${err}`);
     res.status(err.statusCode).send(err.message);
   });
 };
 
-module.exports.isBooked = (req, res) => {
-  if (confirmation.is_booked) {
-    res.sendStatus(201);
-  } else {
-    res.status(400).send('Booking no longer available');
-  }
+module.exports.createListing = (listing, res) => {
+  // const listings = req.body; // Code for when Inventory microserv is connected
+  return es_client.create({
+    index: es_index,
+    type: es_type,
+    body: listing
+  }).then((response, err) => {
+    if (err) { throw err; }
+  }).catch(err => {
+    console.log(`esHelpers CREATE LISTING ERROR where err is ${err}`);
+    res.status(err.statusCode).send(err.message);
+  });
 };
+
+// module.exports.isBooked = (req, res) => {
+//   if (confirmation.is_booked) {
+//     res.sendStatus(201);
+//   } else {
+//     res.status(400).send('Booking no longer available');
+//   }
+// };

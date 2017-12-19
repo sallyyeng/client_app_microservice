@@ -18,4 +18,3 @@ app.listen(sqs_port, function () {
 
 module.exports = sqs;
 
-// How can I create queue just once? //
