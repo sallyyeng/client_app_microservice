@@ -1,33 +1,24 @@
+const axios = require('axios');
 const es_client = require('./index.js');
-const es_index = 'client_micro_service';
-const es_type = 'listings';
+const bookings = require('../directToBookings.js');
+
+const es_index = 'listing';
+const es_type = 'available_listings';
 // const es_index = require('./index.js');
 // const es_type = require('./index.js');
-
-//*************** STUBBED REQUEST BODIES TO TEST HANDLERS *************//
-
-const selectedListing = { // When user selects a listing
-  params: {
-    id: 'ilJlXWABnGPG6BpeYTid'
-  }
-};
-
-const confirmation = { // When you hear back from bookings about bookings req
-  booking_id: 1234556,
-  is_booked: true,
-};
 
 //****************** ElasticSearch helper functions ******************//
 
 module.exports.searchListings = (req, res) => {
-  // const query = req.params; // Code for when Users data is generated
+  let { query } = req.query;
+  console.log('query is:', query);
   return es_client.search({
     index: es_index,
     type: es_type,
     body: {
       query: {
         multi_match: {
-          query: req.params.query, // change this for query
+          query: query, // change this for query
           fields: [
             'city',
             'country'
@@ -45,21 +36,24 @@ module.exports.searchListings = (req, res) => {
 };
 
 module.exports.selectListing = (req, res) => {
-  // const query = req.params.id; // Code for when Users data is generated
-  console.log('inside select listing');
+  let { id } = req.query; // Code for when Users data is generated
+
+  // get listing obj matching user selection
   return es_client.search({
     index: es_index,
     type: es_type,
     body: {
       query: {
         match: {
-          _id: selectedListing.params.id
+          _id: id
         }
       }
     }
-  }).then((response, err) => {
+  }).then((listing, err) => {
     if (err) { throw err; }
-    return response.hits.hits;
+    // // get dates available from bookings
+    return bookings.getDaysAvailable(listing);
+
   }).catch(err => {
     console.log(`esHelpers SEARCH LISTING QUERY FAILED with error: ${err}`);
     res.status(err.statusCode).send(err.message);

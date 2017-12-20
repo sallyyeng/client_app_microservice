@@ -5,7 +5,7 @@ const newListingsQueue = 'https://sqs.us-west-1.amazonaws.com/748430602903/NewLi
 
 // sample response from Inventory //
 const sampleNewListingsFromInv = {
-  body: [{
+  params: [{
     listing_uuid: 5674,
     address: '38 Molly St.',
     city: 'Houston',
@@ -57,7 +57,7 @@ module.exports.createQueue = (queueName) => {
 };
 
 module.exports.sendUserSearchEvent = (req) => {
-  let { user_uuid, search_date, query } = req.params;
+  let { user_uuid, search_date, query } = req.query;
   let userSearch = {
     user_uuid: user_uuid,
     search_date: search_date,
