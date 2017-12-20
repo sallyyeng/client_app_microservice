@@ -41,7 +41,6 @@ const sampleNewListingsFromInv = {
 };
 
 // refactor later for sending batched messages //
-
 module.exports.createQueue = (queueName) => {
   let params = {
     QueueName: queueName

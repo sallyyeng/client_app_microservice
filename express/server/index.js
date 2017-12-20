@@ -67,8 +67,7 @@ app.get('/bookings/availability/:listing_uuid', (req, res) => {
   res.send(sampleDaysAvail);
 });
 
-app.post('/bookings/availability/:listing_uuid', (req, res) => {
-  console.log('inside simulated bookings request service');
+app.post('/bookings/book/:listing_uuid', (req, res) => {
   let bookingReqStatus = {
     isBooked: true
   };
@@ -84,10 +83,6 @@ app.listen(express_port, function () {
 });
 
 // To-Do:
-// all routes are kinda broken:
-// listings doesn't return different listings, just different dates of the same listing
-// listing: cannot test cause need to figure out curl
-// booking: not yet configured
 // figure out how to time the request to inv for new listings
 // logstash the events
 

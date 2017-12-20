@@ -1,17 +1,17 @@
 const axios = require('axios');
 
-let getDaysAvailable = (seletedListing, res) => {
-
-  return axios.get('http://localhost:3000/bookings/days-available', {
+let getDaysAvailable = (selectedListing, month, res) => {
+  return axios.get('http://localhost:3000/bookings/availability/:listing_uuid', {
     params: {
-      id: seletedListing._id
+      id: selectedListing._id,
+      month: selectedListing.month
     }
   })
     .then((response) => {
       let daysAvail = response.data;
       // append daysAvail to matched listing (object is complicated i.e. the chain of properties below)
-      seletedListing.hits.hits[0]._source['days_available'] = daysAvail;
-      return seletedListing.hits.hits;
+      selectedListing.hits.hits[0]._source['days_available'] = daysAvail;
+      return selectedListing.hits.hits;
     })
     .catch(function (error) {
       console.log(`directToBookings SEARCH LISTING QUERY FAILED with error: ${err}`);
@@ -21,7 +21,7 @@ let getDaysAvailable = (seletedListing, res) => {
 let getBookingReqConfirmation = (req, res) => {
   let { user_uuid, listing_uuid, PA_rating, booking_length, booking_start_date, booking_end_date, booking_cost_per_night, booking_total_cost, booking_date } = req.body;
 
-  return axios.post('http://localhost:3000/bookings/availability/:listing_uuid', {
+  return axios.post('http://localhost:3000/bookings/book/:listing_uuid', {
     user_uuid: user_uuid,
     listing_uuid: listing_uuid,
     PA_rating: PA_rating,
