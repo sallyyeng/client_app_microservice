@@ -4,7 +4,7 @@
   "description": "\"Design a scalable service oriented microservice architecture\"",
   "main": "index.js",
   "scripts": {
-    "server": "nodemon ./index.js",
+    "server": "nodemon server/index.js",
     "test": ""
   },
   "repository": {

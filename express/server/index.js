@@ -2,8 +2,8 @@ const express = require('express');
 const app = express();
 const elasticsearch = require('elasticsearch');
 const env = require('dotenv').load(); // try to incorporate config.json file;
-const esHelpers = require('./database/esHelpers');
-const sqsHelpers = require('./sqs/sqsHelpers.js');
+const esHelpers = require('../database/esHelpers.js');
+const sqsHelpers = require('../sqs/sqsHelpers.js');
 const axios = require('axios');
 const bodyParser = require('body-parser');
 

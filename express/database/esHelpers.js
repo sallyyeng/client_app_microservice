@@ -1,6 +1,6 @@
 const axios = require('axios');
 const es_client = require('./index.js');
-const bookings = require('../directToBookings.js');
+const bookings = require('../server/directToBookings.js');
 
 const es_index = 'listing';
 const es_type = 'available_listings';
