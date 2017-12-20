@@ -1,20 +1,28 @@
 
+const express = require('express');
+const app = express();
 const axios = require('axios');
 
 // // search listings
-// axios.get('http://localhost:3000/client/listings', {
-//   params: {
-//     query: 'Turkey'
-//   }
-// });
+axios.get('http://localhost:3000/client/listings', {
+  params: {
+    query: 'Turkey'
+  }
+})
+  .then(response => {
+    console.log('SUCCESS: search listings');
+    console.log(response.data);
+  })
+  .catch(err => {
+    // console.log(err.data);
+  });
 
 // select listing
-axios.get('http://localhost:3000/client/listing/:listing_uuid', {
-  params: {
-    id: 'z6lvcGABjiHOqzg7w0Op',
-    month: 8
-  }
-});
+// axios.get('http://localhost:3000/client/listing/:listing_uuid', {
+//   params: {
+//     id: 'z6lvcGABjiHOqzg7w0Op',
+//   }
+// });
 
 // booking request
 // axios.post('http://localhost:3000/client/booking', {
@@ -29,13 +37,11 @@ axios.get('http://localhost:3000/client/listing/:listing_uuid', {
 //   booking_date: '12/31/2017'
 // });
 
+const express_port = 2000;
 
-
-// axios.get('http://localhost:3000/bookings/book/:listing_uuid', {
-//   params: {
-//     id: 'z6lvcGABjiHOqzg7w0Op'
-//   }
-// });
+app.listen(express_port, function () {
+  console.log('App starting on port: ', express_port);
+});
 
 // // search listings
 // curl -X GET -d "query=Turkey" 'http://localhost:3000/client/listings'

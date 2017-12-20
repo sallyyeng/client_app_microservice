@@ -11,7 +11,7 @@ const es_type = 'available_listings';
 
 module.exports.searchListings = (req, res) => {
   let { query } = req.query;
-  console.log('query is:', query);
+
   return es_client.search({
     index: es_index,
     type: es_type,
@@ -36,7 +36,7 @@ module.exports.searchListings = (req, res) => {
 };
 
 module.exports.selectListing = (req, res) => {
-  let { id, month } = req.query; // Code for when Users data is generated
+  let { id } = req.query; // Code for when Users data is generated
 
   // get listing obj matching user selection
   return es_client.search({
@@ -52,7 +52,7 @@ module.exports.selectListing = (req, res) => {
   }).then((listing, err) => {
     if (err) { throw err; }
     // get dates available from bookings
-    return bookings.getDaysAvailable(listing, month, res);
+    return bookings.getDaysAvailable(listing, res);
   }).catch(err => {
     console.log(`esHelpers SEARCH LISTING QUERY FAILED with error: ${err}`);
     res.status(err.statusCode).send(err.message);

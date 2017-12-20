@@ -1,3 +1,9 @@
+// Add this to the VERY top of the first file loaded in your app
+const apm = require('elastic-apm-node').start({
+  appName: 'Thesis',
+  serverUrl: 'http://localhost:8200',
+});
+
 const express = require('express');
 const app = express();
 const elasticsearch = require('elasticsearch');
@@ -9,10 +15,11 @@ const esHelpers = require('../database/esHelpers.js');
 const sqsHelpers = require('../sqs/sqsHelpers.js');
 const bookings = require('../server/directToBookings.js');
 
+app.use(apm.middleware.express());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 //******************* Endpoint Tests *******************//
-require('./cURL_tests.js');
+// require('./cURL_tests.js');
 
 //****************** Initialize queues *****************//
 // sqsHelpers.createQueue('SearchEventsQueue');
@@ -21,6 +28,7 @@ require('./cURL_tests.js');
 //********************** Endpoints **********************//
 
 app.get('/client/listings', (req, res) => {
+  console.log('inside endpoint')
   // query listings matching user's serach
   esHelpers.searchListings(req, res)
     .then(listings => {

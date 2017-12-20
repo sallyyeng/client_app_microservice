@@ -1,10 +1,9 @@
 const axios = require('axios');
 
-let getDaysAvailable = (selectedListing, month, res) => {
+let getDaysAvailable = (selectedListing, res) => {
   return axios.get('http://localhost:3000/bookings/availability/:listing_uuid', {
     params: {
       id: selectedListing._id,
-      month: selectedListing.month
     }
   })
     .then((response) => {
