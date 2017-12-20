@@ -14,28 +14,44 @@ axios.get('http://localhost:3000/client/listings', {
     console.log(response.data);
   })
   .catch(err => {
-    // console.log(err.data);
+    console.log(err.code);
   });
 
 // select listing
-// axios.get('http://localhost:3000/client/listing/:listing_uuid', {
-//   params: {
-//     id: 'z6lvcGABjiHOqzg7w0Op',
-//   }
-// });
+axios.get('http://localhost:3000/client/listing/:listing_uuid', {
+  params: {
+    id: 'z6lvcGABjiHOqzg7w0Op',
+  }
+})
+  .then(response => {
+    console.log('SUCCESS: selected listing');
+    console.log(response.data);
+  })
+  .catch(err => {
+    console.log(err.code);
+  });
+
 
 // booking request
-// axios.post('http://localhost:3000/client/booking', {
-//   user_uuid: 19299292824,
-//   listing_uuid: 'z6lvcGABjiHOqzg7w0Op',
-//   pa_rating: 2,
-//   booking_length: 20,
-//   booking_start_date: '1/1/2018',
-//   booking_end_date: '1/20/2018',
-//   booking_cost_per_night: 89,
-//   booking_total_cost: 1780,
-//   booking_date: '12/31/2017'
-// });
+axios.post('http://localhost:3000/client/booking', {
+  user_uuid: 19299292824,
+  listing_uuid: 'z6lvcGABjiHOqzg7w0Op',
+  pa_rating: 2,
+  booking_length: 20,
+  booking_start_date: '1/1/2018',
+  booking_end_date: '1/20/2018',
+  booking_cost_per_night: 89,
+  booking_total_cost: 1780,
+  booking_date: '12/31/2017'
+})
+  .then(response => {
+    console.log('SUCCESS: booking request');
+    console.log(response.data);
+  })
+  .catch(err => {
+    console.log(err.code);
+  });
+
 
 const express_port = 2000;
 

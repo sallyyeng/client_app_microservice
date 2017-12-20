@@ -41,7 +41,8 @@ app.get('/client/listings', (req, res) => {
     });
 });
 
-app.get('/client/listing/:listing_uuid', (req, res) => { // figure out how to ping this
+app.get('/client/listing/:listing_uuid', (req, res) => {
+  console.log('inside select listing');
   esHelpers.selectListing(req, res)
     .then(listing => {
       console.log(listing[0]._source); // print matched listing
