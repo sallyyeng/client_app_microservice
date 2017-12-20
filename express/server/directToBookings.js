@@ -1,6 +1,6 @@
 const axios = require('axios');
 
-let getDaysAvailable = (seletedListing) => {
+let getDaysAvailable = (seletedListing, res) => {
 
   return axios.get('http://localhost:3000/bookings/days-available', {
     params: {
@@ -18,10 +18,29 @@ let getDaysAvailable = (seletedListing) => {
     });
 };
 
-let getBookingReqConfirmation = () => {
+let getBookingReqConfirmation = (req, res) => {
+  let { user_uuid, listing_uuid, PA_rating, booking_length, booking_start_date, booking_end_date, booking_cost_per_night, booking_total_cost, booking_date } = req.body;
 
+  return axios.post('http://localhost:3000/bookings/availability/:listing_uuid', {
+    user_uuid: user_uuid,
+    listing_uuid: listing_uuid,
+    PA_rating: PA_rating,
+    booking_length: booking_length,
+    booking_start_date: booking_start_date,
+    booking_end_date: booking_end_date,
+    booking_cost_per_night: booking_cost_per_night,
+    booking_total_cost: booking_total_cost,
+    booking_date: booking_date
+  })
+    .then((bookingsReqStatus) => {
+      return bookingsReqStatus.data;
+    })
+    .catch(function (error) {
+      console.log(`directToBookings SEARCH LISTING QUERY FAILED with error: ${err}`);
+    });
 };
 
+
 module.exports = {
-  getDaysAvailable
+  getDaysAvailable, getBookingReqConfirmation
 };

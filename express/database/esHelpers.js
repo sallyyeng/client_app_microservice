@@ -52,7 +52,7 @@ module.exports.selectListing = (req, res) => {
   }).then((listing, err) => {
     if (err) { throw err; }
     // // get dates available from bookings
-    return bookings.getDaysAvailable(listing);
+    return bookings.getDaysAvailable(listing, res);
 
   }).catch(err => {
     console.log(`esHelpers SEARCH LISTING QUERY FAILED with error: ${err}`);
@@ -74,10 +74,4 @@ module.exports.createListing = (listing, res) => {
   });
 };
 
-// module.exports.isBooked = (req, res) => {
-//   if (confirmation.is_booked) {
-//     res.sendStatus(201);
-//   } else {
-//     res.status(400).send('Booking no longer available');
-//   }
-// };
+

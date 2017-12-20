@@ -2,10 +2,12 @@ const express = require('express');
 const app = express();
 const elasticsearch = require('elasticsearch');
 const env = require('dotenv').load(); // try to incorporate config.json file;
-const esHelpers = require('../database/esHelpers.js');
-const sqsHelpers = require('../sqs/sqsHelpers.js');
 const axios = require('axios');
 const bodyParser = require('body-parser');
+
+const esHelpers = require('../database/esHelpers.js');
+const sqsHelpers = require('../sqs/sqsHelpers.js');
+const bookings = require('../server/directToBookings.js');
 
 app.use(bodyParser.urlencoded({ extended: false }));
 
@@ -31,10 +33,10 @@ app.get('/client/listings', (req, res) => {
     });
 });
 
-app.get('/client/listing/:id', (req, res) => { // figure out how to ping this
+app.get('/client/listing/:listing_uuid', (req, res) => { // figure out how to ping this
   esHelpers.selectListing(req, res)
     .then(listing => {
-      // console.log(listing[0]._source); // print matched listing
+      console.log(listing[0]._source); // print matched listing
       res.send(listing);
     })
     .catch(err => {
@@ -43,19 +45,34 @@ app.get('/client/listing/:id', (req, res) => { // figure out how to ping this
 });
 
 app.post('/client/booking', (req, res) => {
-  // let { user_uuid, listing_uuid, PA_rating, booking_start_date, booking_end_date, booking_cost_per_night, booking_total_cost } = req.body;
-  // send direct http request to bookings
-  // use helper isBooked below
-  // handle the message received from bookings: 201 for success; 404? for denial
-
-
+  bookings.getBookingReqConfirmation(req)
+    .then(bookingReq => {
+      if (bookingReq.isBooked) {
+        console.log('successful booking!');
+        res.sendStatus(201);
+      } else {
+        throw err;
+      }
+    })
+    .catch(err => {
+      console.log('index.js booking request handler ERROR: ', err);
+      res.status(400).send('Booking no longer available');
+    });
 });
 
 //********************** Test Endpoints **********************//
 
-app.get('/bookings/days-available', (req, res) => {
+app.get('/bookings/availability/:listing_uuid', (req, res) => {
   let sampleDaysAvail = ['1/1/2018', '1/2/2018', '1/3/2018', '1/4/2018'];
   res.send(sampleDaysAvail);
+});
+
+app.post('/bookings/availability/:listing_uuid', (req, res) => {
+  console.log('inside simulated bookings request service');
+  let bookingReqStatus = {
+    isBooked: true
+  };
+  res.send(bookingReqStatus);
 });
 
 //********************** Test Endpoints **********************//
