@@ -70,9 +70,9 @@ module.exports.sendUserSearchEvent = (req) => {
 
   sqs.sendMessage(sqsParams, (err, data) => {
     if (err) {
-      console.log('User Search ERROR: SQS MESSAGE SEND: ', err);
+      // console.log('User Search ERROR: SQS MESSAGE SEND: ', err);
     } else {
-      console.log('User Search SUCCESS: SQS MESSAGE SEND: ', data);
+      // console.log('User Search SUCCESS: SQS MESSAGE SEND: ', data);
     }
   });
 };

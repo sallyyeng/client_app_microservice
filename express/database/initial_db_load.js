@@ -82,7 +82,7 @@
 //     });
 // };
 
-// // createBulkPost();
+// createBulkPost();
 
 
 // // enumerateFromStartDate = (startDate, daysLength) => {
@@ -103,12 +103,12 @@
 // //   return daysAvailable;
 // // };
 
-// // generateDaysAvailable = () => {
-// //   // generate length of daysAvail array
-// //   let daysLength = getRandomInt(50, 150);
+// // // generateDaysAvailable = () => {
+// // //   // generate length of daysAvail array
+// // //   let daysLength = getRandomInt(50, 150);
 
-// //   let randomStartDate = getRandomDate(new Date(2018, 01, 01), new Date(2018, 06, 31)) // select random start date between 1/1/2018 and 6/31/2018
-// //   return enumerateFromStartDate(randomStartDate, daysLength);
-// // };
+// // //   let randomStartDate = getRandomDate(new Date(2018, 01, 01), new Date(2018, 06, 31)) // select random start date between 1/1/2018 and 6/31/2018
+// // //   return enumerateFromStartDate(randomStartDate, daysLength);
+// // // };
 
 

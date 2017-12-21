@@ -18,21 +18,22 @@ const bookings = require('../server/directToBookings.js');
 app.use(apm.middleware.express());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-//******************* Endpoint Tests *******************//
-// require('./cURL_tests.js');
-
 //****************** Initialize queues *****************//
 // sqsHelpers.createQueue('SearchEventsQueue');
 // sqsHelpers.createQueue('NewListingsQueue');
 
 //********************** Endpoints **********************//
 
+app.get('/', (req, res) => {
+  console.log('hello');
+  res.sendStatus(200);
+});
+
 app.get('/client/listings', (req, res) => {
-  console.log('inside endpoint')
   // query listings matching user's serach
   esHelpers.searchListings(req, res)
     .then(listings => {
-      console.log(`${listings.length} listings returned from search`);
+      // console.log(`${listings.length} listings returned from search`);
       sqsHelpers.sendUserSearchEvent(req);
       res.status(200).send(listings);
     })
@@ -42,10 +43,10 @@ app.get('/client/listings', (req, res) => {
 });
 
 app.get('/client/listing/:listing_uuid', (req, res) => {
-  console.log('inside select listing');
+
   esHelpers.selectListing(req, res)
     .then(listing => {
-      console.log(listing[0]._source); // print matched listing
+      // console.log(listing[0]._source); // print matched listing
       res.send(listing);
     })
     .catch(err => {
@@ -72,7 +73,7 @@ app.post('/client/booking', (req, res) => {
 //********************** Test Endpoints **********************//
 
 app.get('/bookings/availability/:listing_uuid', (req, res) => {
-  let sampleDaysAvail = ['1/1/2018', '1/2/2018', '1/3/2018', '1/4/2018'];
+  let sampleDaysAvail = {'10-10-1002': true, '11-23-2922': false};
   res.send(sampleDaysAvail);
 });
 

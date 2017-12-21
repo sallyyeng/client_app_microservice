@@ -1,11 +1,7 @@
 const axios = require('axios');
 
 let getDaysAvailable = (selectedListing, res) => {
-  return axios.get('http://localhost:3000/bookings/availability/:listing_uuid', {
-    params: {
-      id: selectedListing._id,
-    }
-  })
+  return axios.get(`http://localhost:3000/bookings/availability/${selectedListing._id}`)
     .then((response) => {
       let daysAvail = response.data;
       // append daysAvail to matched listing (object is complicated i.e. the chain of properties below)
