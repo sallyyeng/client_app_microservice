@@ -38,6 +38,7 @@ module.exports.searchListings = (req, res) => {
 module.exports.selectListing = (req, res) => {
   // let { id } = req.query; // Code for when Users data is generated
   let id = req.params.listing_uuid;
+
   // get listing obj matching user selection
   return es_client.search({
     index: es_index,

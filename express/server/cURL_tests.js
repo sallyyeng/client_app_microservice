@@ -1,9 +1,9 @@
 
-// const express = require('express');
-// const app = express();
-// const axios = require('axios');
+const express = require('express');
+const app = express();
+const axios = require('axios');
 
-// // // search listings
+// // search listings
 // axios.get('http://localhost:3000/client/listings', {
 //   params: {
 //     query: 'Turkey'
@@ -18,7 +18,7 @@
 //   });
 
 // // select listing
-// axios.get('http://localhost:3000/client/listing/:listing_uuid', {
+// axios.get('http://localhost:3000/client/listing/z6lvcGABjiHOqzg7w0Op', {
 //   params: {
 //     id: 'z6lvcGABjiHOqzg7w0Op',
 //   }

@@ -15,7 +15,6 @@ const esHelpers = require('../database/esHelpers.js');
 const sqsHelpers = require('../sqs/sqsHelpers.js');
 const bookings = require('../server/directToBookings.js');
 
-app.use(apm.middleware.express());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 //****************** Initialize queues *****************//
@@ -83,6 +82,8 @@ app.post('/bookings/book/:listing_uuid', (req, res) => {
   };
   res.send(bookingReqStatus);
 });
+
+app.use(apm.middleware.express());
 
 //********************** Test Endpoints **********************//
 
