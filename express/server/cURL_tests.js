@@ -1,7 +1,7 @@
 
-const express = require('express');
-const app = express();
-const axios = require('axios');
+// const express = require('express');
+// const app = express();
+// const axios = require('axios');
 
 // // search listings
 // axios.get('http://localhost:3000/client/listings', {
@@ -11,7 +11,7 @@ const axios = require('axios');
 // })
 //   .then(response => {
 //     console.log('SUCCESS: search listings');
-//     console.log(response.data);
+//     // console.log(response.data);
 //   })
 //   .catch(err => {
 //     console.log(err.code);
@@ -19,13 +19,13 @@ const axios = require('axios');
 
 // // select listing
 // axios.get('http://localhost:3000/client/listing/z6lvcGABjiHOqzg7w0Op', {
-//   params: {
-//     id: 'z6lvcGABjiHOqzg7w0Op',
-//   }
+//   // params: {
+//   //   id: 'z6lvcGABjiHOqzg7w0Op',
+//   // }
 // })
 //   .then(response => {
 //     console.log('SUCCESS: selected listing');
-//     console.log(response.data);
+//     // console.log(response.data);
 //   })
 //   .catch(err => {
 //     console.log(err.code);
@@ -45,8 +45,8 @@ const axios = require('axios');
 //   booking_date: '12/31/2017'
 // })
 //   .then(response => {
-//     console.log('SUCCESS: booking request');
 //     console.log(response.data);
+//     console.log('SUCCESS: booking request');
 //   })
 //   .catch(err => {
 //     console.log(err.code);

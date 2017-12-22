@@ -1,4 +1,4 @@
-// Add this to the VERY top of the first file loaded in your app
+
 const apm = require('elastic-apm-node').start({
   appName: 'Thesis',
   serverUrl: 'http://localhost:8200',
@@ -15,18 +15,24 @@ const esHelpers = require('../database/esHelpers.js');
 const sqsHelpers = require('../sqs/sqsHelpers.js');
 const bookings = require('../server/directToBookings.js');
 
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(apm.middleware.express());
+
+//**************** Server Initialization ****************//
+
+const express_port = 3000;
+
+app.listen(express_port, function () {
+  console.log('App starting on port: ', express_port);
+});
 
 //****************** Initialize queues *****************//
+
 // sqsHelpers.createQueue('SearchEventsQueue');
 // sqsHelpers.createQueue('NewListingsQueue');
 
 //********************** Endpoints **********************//
-
-app.get('/', (req, res) => {
-  console.log('hello');
-  res.sendStatus(200);
-});
 
 app.get('/client/listings', (req, res) => {
   // query listings matching user's serach
@@ -34,7 +40,7 @@ app.get('/client/listings', (req, res) => {
     .then(listings => {
       // console.log(`${listings.length} listings returned from search`);
       sqsHelpers.sendUserSearchEvent(req);
-      res.status(200).send(listings);
+      res.send(listings);
     })
     .catch(err => {
       console.log('index.js search listings error: ', err);
@@ -42,7 +48,6 @@ app.get('/client/listings', (req, res) => {
 });
 
 app.get('/client/listing/:listing_uuid', (req, res) => {
-
   esHelpers.selectListing(req, res)
     .then(listing => {
       // console.log(listing[0]._source); // print matched listing
@@ -83,19 +88,11 @@ app.post('/bookings/book/:listing_uuid', (req, res) => {
   res.send(bookingReqStatus);
 });
 
-app.use(apm.middleware.express());
 
-//********************** Test Endpoints **********************//
 
-const express_port = 3000;
-
-app.listen(express_port, function () {
-  console.log('App starting on port: ', express_port);
-});
 
 // To-Do:
 // figure out how to time the request to inv for new listings
-// logstash the events
 
 // Notes:
 // figure out if your database storing is correct b/c search listings is weird.. 10 entries only

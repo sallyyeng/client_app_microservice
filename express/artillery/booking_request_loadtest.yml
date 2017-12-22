@@ -1,0 +1,27 @@
+config:
+  target: "http://localhost:3000"
+  phases:
+  #  'arrivalRate' virtual users/second that last for 'duration' seconds
+    - duration: 2
+      arrivalRate: 1
+scenarios:
+  - name: "search listings"
+    flow:
+      - post:
+          url: "/client/booking"
+          json:
+            user_uuid: 19299292824,
+            listing_uuid: 'z6lvcGABjiHOqzg7w0Op'
+            pa_rating: 2
+            booking_length: 20
+            booking_start_date: '1/1/2018'
+            booking_end_date: '1/20/2018'
+            booking_cost_per_night: 89
+            booking_total_cost: 1780
+            booking_date: '12/31/2017'
+
+
+
+
+
+
