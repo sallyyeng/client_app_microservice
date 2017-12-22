@@ -34,6 +34,10 @@ app.listen(express_port, function () {
 
 //********************** Endpoints **********************//
 
+app.get('/', (req, res) => {
+  res.send();
+});
+
 app.get('/client/listings', (req, res) => {
   // query listings matching user's serach
   esHelpers.searchListings(req, res)

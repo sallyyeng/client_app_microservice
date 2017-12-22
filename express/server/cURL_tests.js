@@ -11,7 +11,7 @@
 // })
 //   .then(response => {
 //     console.log('SUCCESS: search listings');
-//     // console.log(response.data);
+//     console.log(response.data);
 //   })
 //   .catch(err => {
 //     console.log(err.code);
