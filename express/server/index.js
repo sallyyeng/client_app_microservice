@@ -66,7 +66,6 @@ app.post('/client/booking', (req, res) => {
   bookings.getBookingReqConfirmation(req)
     .then(bookingReq => {
       if (bookingReq.isBooked) {
-        console.log('successful booking!');
         res.sendStatus(201);
       } else {
         throw err;
