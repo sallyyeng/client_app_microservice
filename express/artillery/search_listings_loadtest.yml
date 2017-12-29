@@ -1,12 +1,11 @@
 config:
   target: "http://localhost:3000"
   phases:
-  #  5 virtual users/second that last for 60 seconds
-    - duration: 2
-      arrivalRate: 1
+  #  10 virtual users/second that last for 180 seconds
+    - duration: 180
+      arrivalRate: 10
 scenarios:
   - name: "search listings"
     flow:
       - get:
           url: "/client/listings?query=Turkey"
-
