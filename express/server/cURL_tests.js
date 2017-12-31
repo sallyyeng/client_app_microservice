@@ -6,22 +6,22 @@
 // // search listings
 // axios.get('http://localhost:3000/client/listings', {
 //   params: {
-//     query: 'Turkey'
+//     query: 'Taiwan'
 //   }
 // })
 //   .then(response => {
 //     console.log('SUCCESS: search listings');
-//     console.log(response.data);
+//     console.log(response.data[0]);
 //   })
 //   .catch(err => {
 //     console.log(err.code);
 //   });
 
 // // select listing
-// axios.get('http://localhost:3000/client/listing/z6lvcGABjiHOqzg7w0Op', {
-//   // params: {
-//   //   id: 'z6lvcGABjiHOqzg7w0Op',
-//   // }
+// axios.get('http://localhost:3000/client/listing/FF1WqWABegjmOUHzUrpr', {
+//   params: {
+//     country: 'Tunisia', // front-end would save country state per each listing id upon initial search
+//   }
 // })
 //   .then(response => {
 //     console.log('SUCCESS: selected listing');
@@ -59,8 +59,8 @@
 //   console.log('App starting on port: ', express_port);
 // });
 
-// // // search listings
-// // curl -X GET -d "query=Turkey" 'http://localhost:3000/client/listings'
+// // search listings
+// curl -X GET -d "query=Turkey" 'http://localhost:3000/client/listings'
 
-// // // select listing
-// // curl -X GET -d "id=z6lvcGABjiHOqzg7w0Op" 'http://localhost:3000/client/listing/:id'
+// // select listing
+// curl -X GET -d "id=z6lvcGABjiHOqzg7w0Op" 'http://localhost:3000/client/listing/:id'

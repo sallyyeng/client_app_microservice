@@ -4,7 +4,7 @@ const elasticsearch = require('elasticsearch');
 const es_client = elasticsearch.Client({
   host: process.env.ELASTICSEARCH_HOST + ':9200'
 });
-const es_index = 'client_micro_service';
+
 const es_type = 'listings';
 
 // Verify connection with elasticsearch db //
@@ -18,23 +18,24 @@ es_client.ping({
     }
   }));
 
-// If index doesn't already exist, create one //
-es_client.indices.exists({index: `${es_index}`})
-  .then(exists => {
-    if (!exists) {
-      es_client.indices.create({
-        index: es_index
-      })
-        .then((response, err) => {
-          if (err) { throw err; }
-          console.log('es_index created!');
-        })
-        .catch(err => {
-          console.log(`CANNOT CREATE INDEX > INVESTIGATE THIS ERROR: ${err}`);
-        });
-    }
-  });
-
 module.exports = es_client;
-// module.exports = es_index;
-// module.exports = es_type;
+
+//***** Code to generate indexes, but initial db load took care of that for us ******//
+// airbnbIndexes.forEach(index => {
+//   // If index doesn't already exist, create one //
+//   es_client.indices.exists({index: `${index}`})
+//     .then(exists => {
+//       if (!exists) {
+//         es_client.indices.create({
+//           index: index
+//         })
+//           .then((response, err) => {
+//             if (err) { throw err; }
+//             console.log('index created!');
+//           })
+//           .catch(err => {
+//             console.log(`CANNOT CREATE INDEX > INVESTIGATE THIS ERROR: ${err}`);
+//           });
+//       }
+//     });
+// });

@@ -3,9 +3,9 @@ config:
   phases:
   #  10 virtual users/second that last for 180 seconds
     - duration: 180
-      arrivalRate: 10
+      arrivalRate: 150
 scenarios:
   - name: "search listings"
     flow:
       - get:
-          url: "/client/listings?query=Turkey"
+          url: "/client/listings?query=Taiwan"

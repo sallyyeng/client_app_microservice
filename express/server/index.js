@@ -1,6 +1,6 @@
 
 const apm = require('elastic-apm-node').start({
-  appName: 'Thesis',
+  appName: 'Client App Service',
   serverUrl: 'http://localhost:8200',
 });
 
@@ -14,6 +14,7 @@ const bodyParser = require('body-parser');
 const esHelpers = require('../database/esHelpers.js');
 const sqsHelpers = require('../sqs/sqsHelpers.js');
 const bookings = require('../server/directToBookings.js');
+const db_load = require('../database/initial_db_load');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -95,13 +96,3 @@ app.post('/bookings/book/:listing_uuid', (req, res) => {
 
 
 // To-Do:
-// figure out how to time the request to inv for new listings
-
-// Notes:
-// figure out if your database storing is correct b/c search listings is weird.. 10 entries only
-// configure booking handler with axios etc.
-
-// Stretch goal:
-// figure out elastic search exact match: san francisco should not return san marino lol
-// docker
-// starting testing your mvp
