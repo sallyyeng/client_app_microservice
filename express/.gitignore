@@ -6,6 +6,8 @@ config/staging.json
 config/test.json
 .env
 
+aws_es_service/
+
 # OS X
 .DS_Store
 

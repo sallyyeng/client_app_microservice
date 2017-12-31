@@ -52,6 +52,7 @@ mapLetterToIndex = (letter) => {
 module.exports.searchListings = (req, res) => {
   let { query } = req.query;
   let es_index = `es_index_${mapLetterToIndex(query[0])}`;
+  // console.log('inside opt app');
 
   return es_client.search({
     index: es_index,

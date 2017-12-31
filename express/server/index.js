@@ -25,7 +25,7 @@ app.use(apm.middleware.express());
 const express_port = 3000;
 
 app.listen(express_port, function () {
-  console.log('App starting on port: ', express_port);
+  console.log('OPT App starting on port: ', express_port);
 });
 
 //****************** Initialize queues *****************//

@@ -1,7 +1,7 @@
 // Require objects.
-var express = require('express');
-var app = express();
-var aws = require('aws-sdk');
+const express = require('express');
+const app = express();
+const aws = require('aws-sdk');
 
 // Load your AWS credentials and try to instantiate the object.
 aws.config.loadFromPath('./config/config.json');

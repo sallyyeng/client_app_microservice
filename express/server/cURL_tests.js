@@ -1,21 +1,21 @@
 
-// const express = require('express');
-// const app = express();
-// const axios = require('axios');
+const express = require('express');
+const app = express();
+const axios = require('axios');
 
-// // search listings
-// axios.get('http://localhost:3000/client/listings', {
-//   params: {
-//     query: 'Taiwan'
-//   }
-// })
-//   .then(response => {
-//     console.log('SUCCESS: search listings');
-//     console.log(response.data[0]);
-//   })
-//   .catch(err => {
-//     console.log(err.code);
-//   });
+// search listings
+axios.get('http://localhost:3000/client/listings', {
+  params: {
+    query: 'Taiwan'
+  }
+})
+  .then(response => {
+    console.log('SUCCESS: search listings');
+    console.log(response.data[0]);
+  })
+  .catch(err => {
+    console.log(err.code);
+  });
 
 // // select listing
 // axios.get('http://localhost:3000/client/listing/FF1WqWABegjmOUHzUrpr', {
@@ -53,11 +53,11 @@
 //   });
 
 
-// const express_port = 2000;
+const express_port = 2000;
 
-// app.listen(express_port, function () {
-//   console.log('App starting on port: ', express_port);
-// });
+app.listen(express_port, function () {
+  console.log('App starting on port: ', express_port);
+});
 
 // // search listings
 // curl -X GET -d "query=Turkey" 'http://localhost:3000/client/listings'

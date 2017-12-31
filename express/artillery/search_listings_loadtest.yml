@@ -2,10 +2,17 @@ config:
   target: "http://localhost:3000"
   phases:
   #  10 virtual users/second that last for 180 seconds
-    - duration: 180
-      arrivalRate: 150
+    - duration: 60
+      arrivalRate: 1000
 scenarios:
   - name: "search listings"
     flow:
       - get:
           url: "/client/listings?query=Taiwan"
+
+# figure out how to determine difference in performance using arrivalRate with opt and noopt db
+
+# STORY:
+# 1 index 5 shards
+# 4 indexes 5 shards
+# 4 indexes with 10 shards each

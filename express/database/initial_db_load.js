@@ -5,12 +5,6 @@ const es_client = elasticsearch.Client({
   host: 'localhost:9200'
 });
 
-// map of index to letters
-// const es_index_1 = 'listings_af';
-// const es_index_2 = 'listings_gl';
-// const es_index_3 = 'listings_mr';
-// const es_index_4 = 'listings_sz';
-
 const es_type = 'listings';
 
 const fs = require('fs');
@@ -75,14 +69,15 @@ mapLetterToIndex = (letter) => {
 
   let number = alphabetMapper[letter];
 
+  // return the corresponding index name for letter //
   if (number >= 0 && number <= 5) {
-    return 1;
+    return 'listings_af';
   } else if (number >= 6 && number <= 11) {
-    return 2;
+    return 'listings_gl';
   } else if (number >= 12 && number <= 17) {
-    return 3;
+    return 'listings_mr';
   } else {
-    return 4;
+    return 'listings_sz';
   }
 };
 
@@ -99,7 +94,7 @@ listingGenerator = () => {
     // daysAvailable: generateDaysAvailable(), // knixing b/c you're querying johnny for availability
   };
 
-  let es_index = `es_index_${mapLetterToIndex(listing.country[0])}`;
+  let es_index = mapLetterToIndex(listing.country[0]);
 
   let headers = {'index': {'_index': es_index, '_type': es_type}};
 
@@ -119,7 +114,8 @@ createBulkPost = () => {
   }
 
   // generate x listings for each bulk upload
-  for (let i = 0; i < 100; i++) {
+  // for (let i = 0; i < 100; i++) {
+  for (let i = 0; i < 5; i++) {
     bulkUpload = bulkUpload.concat(listingGenerator());
   }
 
@@ -130,7 +126,8 @@ createBulkPost = () => {
       if (err) { throw err; }
 
       // send bulk upload y times for x * y listings total in db
-      if (uploadCount < 50000) {
+      // if (uploadCount < 50000) {
+      if (uploadCount < 5) {
         uploadCount++;
         createBulkPost();
       }
@@ -140,7 +137,8 @@ createBulkPost = () => {
     });
 };
 
-// createBulkPost();
+// COMMENT OUT WHEN SEEDING //
+createBulkPost();
 
 //********* Code for generating array of sequential dates ********//
 
