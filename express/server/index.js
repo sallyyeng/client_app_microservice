@@ -1,8 +1,13 @@
 
-const apm = require('elastic-apm-node').start({
-  appName: 'Client App Service',
-  serverUrl: 'http://localhost:8200',
-});
+// const apm = require('elastic-apm-node').start({
+//   appName: 'Client App Service',
+//   serverUrl: 'http://localhost:8200',
+// });
+
+// const winston = require('winston');
+// const Elasticsearch = require('winston-elasticsearch');
+
+require('newrelic');
 
 const express = require('express');
 const app = express();
@@ -18,15 +23,6 @@ const db_load = require('../database/initial_db_load');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(apm.middleware.express());
-
-//**************** Server Initialization ****************//
-
-const express_port = 3000;
-
-app.listen(express_port, function () {
-  console.log('OPT App starting on port: ', express_port);
-});
 
 //****************** Initialize queues *****************//
 
@@ -92,7 +88,15 @@ app.post('/bookings/book/:listing_uuid', (req, res) => {
   res.send(bookingReqStatus);
 });
 
+// app.use(apm.middleware.express());
 
+//**************** Server Initialization ****************//
+
+const express_port = 3000;
+
+app.listen(express_port, function () {
+  console.log('OPT App starting on port: ', express_port);
+});
 
 
 // To-Do:

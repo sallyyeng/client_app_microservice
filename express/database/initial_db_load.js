@@ -94,7 +94,11 @@ listingGenerator = () => {
     // daysAvailable: generateDaysAvailable(), // knixing b/c you're querying johnny for availability
   };
 
+  // Multiple Index DB LOAD
   let es_index = mapLetterToIndex(listing.country[0]);
+
+  // Single Index DB LOAD
+  // let es_index = 'No_opt_listings';
 
   let headers = {'index': {'_index': es_index, '_type': es_type}};
 
@@ -114,8 +118,8 @@ createBulkPost = () => {
   }
 
   // generate x listings for each bulk upload
-  // for (let i = 0; i < 100; i++) {
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < 100; i++) {
+  // for (let i = 0; i < 5; i++) {
     bulkUpload = bulkUpload.concat(listingGenerator());
   }
 
@@ -126,8 +130,8 @@ createBulkPost = () => {
       if (err) { throw err; }
 
       // send bulk upload y times for x * y listings total in db
-      // if (uploadCount < 50000) {
-      if (uploadCount < 5) {
+      if (uploadCount < 65000) {
+      // if (uploadCount < 5) {
         uploadCount++;
         createBulkPost();
       }
@@ -137,8 +141,8 @@ createBulkPost = () => {
     });
 };
 
-// COMMENT OUT WHEN SEEDING //
-createBulkPost();
+// COMMENT IN WHEN SEEDING //
+// createBulkPost();
 
 //********* Code for generating array of sequential dates ********//
 

@@ -2,11 +2,12 @@ const axios = require('axios');
 const es_client = require('./index.js');
 const bookings = require('../server/directToBookings.js');
 
+// let es_index = 'client_micro_service'; // comment in for single index querying
 const es_type = 'listings';
 
 //****************** ElasticSearch helper functions ******************//
 
-mapLetterToIndex = (letter) => {
+mapToIndex = (letter) => {
   let alphabetMapper = {
     A: 0,
     B: 1,
@@ -38,21 +39,26 @@ mapLetterToIndex = (letter) => {
 
   let number = alphabetMapper[letter];
 
+  // return the corresponding index name for letter //
   if (number >= 0 && number <= 5) {
-    return 1;
+    // return 'listings_af';
+    return 'es_index_1';
   } else if (number >= 6 && number <= 11) {
-    return 2;
+    // return 'listings_gl';
+    return 'es_index_2';
   } else if (number >= 12 && number <= 17) {
-    return 3;
+    // return 'listings_mr';
+    return 'es_index_3';
   } else {
-    return 4;
+    // return 'listings_sz';
+    return 'es_index_4';
   }
 };
 
 module.exports.searchListings = (req, res) => {
   let { query } = req.query;
-  let es_index = `es_index_${mapLetterToIndex(query[0])}`;
-  // console.log('inside opt app');
+  let es_index = mapToIndex(query[0]);
+  // console.log('database is ', es_index);
 
   return es_client.search({
     index: es_index,
@@ -75,7 +81,7 @@ module.exports.searchListings = (req, res) => {
 module.exports.selectListing = (req, res) => {
   // let { id } = req.query; // Code for when Users data is generated
   let id = req.params.listing_uuid;
-  let es_index = `es_index_${mapLetterToIndex(req.query.country[0])}`;
+  let es_index = mapLetterToIndex(req.query.country[0]);
 
   // get listing obj matching user selection
   return es_client.search({
@@ -102,7 +108,7 @@ module.exports.createListing = (listing, res) => {
   // loop through each listing and grab the country's first letter
   // define es_index and then use es create command to add to db
 
-  let es_index = `es_index_${mapLetterToIndex(req.query.country[0])}`;
+  let es_index = mapLetterToIndex(req.query.country[0]);
   return es_client.create({
     index: es_index,
     type: es_type,

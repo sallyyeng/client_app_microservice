@@ -1,8 +1,9 @@
 const elasticsearch = require('elasticsearch');
+const esPORT = '9200';
 
 // Initialize elasticsearch server connection //
 const es_client = elasticsearch.Client({
-  host: process.env.ELASTICSEARCH_HOST + ':9200'
+  host: process.env.ELASTICSEARCH_HOST + ':' + esPORT
 });
 
 const es_type = 'listings';
@@ -14,7 +15,7 @@ es_client.ping({
     if (error) {
       console.trace('elasticsearch cluster is down!: ', error);
     } else {
-      console.log('ElasticSearch DB Connected');
+      console.log('ElasticSearch DB Connected: ' + esPORT);
     }
   }));
 
